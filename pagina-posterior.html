@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a IngeNova</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="logo.jpg" alt="Logo del Proyecto" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#actividades">Actividades</a></li>
+                <li><a href="#documentos">Documentos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        <button class="logout-btn">Cerrar Sesión</button>
+    </header>
+
+    <section id="bienvenida">
+        <h1>¡Bienvenido a IngeNova!</h1>
+        <p>Aquí puedes gestionar tus actividades, documentos y más.</p>
+        <div class="user-info">
+            <p>Nombre: <span id="nombreUsuario"></span></p>
+            <p>Rol: <span id="rolUsuario"></span></p>
+        </div>
+    </section>
+
+    <footer>
+        <img src="logo.jpg" alt="Logo del Proyecto" class="logo-footer">
+        <p>Contacto: 222T0247@itsm.edu.mx | Teléfono: 281-869-5074</p>
+        <div class="social-media">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+        </div>
+        <p><a href="#privacidad">Aviso de Privacidad</a> | <a href="#terminos">Términos de Uso</a></p>
+    </footer>
+
+    <script type="module">
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { app } from "./script.js";
+
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Verifica el estado de autenticación
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Obtiene los datos del usuario desde Firestore
+                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+                if (userDoc.exists()) {
+                    document.getElementById("nombreUsuario").textContent = userDoc.data().nombre;
+                    document.getElementById("rolUsuario").textContent = userDoc.data().rol;
+                }
+            } else {
+                // Si no hay usuario autenticado, redirige a la página de inicio de sesión
+                window.location.href = "index.html";
+            }
+        });
+
+        // Cerrar sesión
+        document.querySelector(".logout-btn").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            }).catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+        });
+    </script>
+</body>
+</html>
