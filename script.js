@@ -25,3 +25,15 @@ const iniciarSesion = (email, password) => {
       console.error("Error al iniciar sesión:", error.message);
     });
 };
+
+const guardarUsuario = async (nombre, email) => {
+  try {
+    const docRef = await addDoc(collection(db, "usuarios"), {
+      nombre: nombre,
+      email: email
+    });
+    console.log("Usuario guardado con ID:", docRef.id);
+  } catch (error) {
+    console.error("Error al guardar:", error);
+  }
+};
