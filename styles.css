@@ -4,41 +4,57 @@ body {
     padding: 0;
     background-color: #f4f4f4;
 }
-/* Header */
+
 header {
-  background: var(--primary);
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-  z-index: 100;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
 }
 
 .logo {
-  max-width: 120px;
-  height: auto;
+    width: 150px;
+    height: auto;
+    margin-right: 20px;
 }
 
-/* Footer */
+#bienvenida {
+    text-align: center;
+    padding: 20px;
+}
+
+.opciones {
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
 footer {
-  background: var(--primary);
-  color: white;
-  padding: 1.5rem;
-  margin-top: auto;
-  position: relative;
-  z-index: 50;
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .logo-footer {
-  max-width: 80px;
-  height: auto;
-  margin-bottom: 1rem;
-}
-
-.social-media {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin: 1rem 0;
+    width: 100px;
+    height: auto;
 }
