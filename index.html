@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Residencias</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <img src="logo.jpg" alt="Logo del Proyecto" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#registro">Registro</a></li>
+                <li><a href="#actividades">Actividades</a></li>
+                <li><a href="#documentos">Documentos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        <button class="login-btn">Iniciar Sesión</button>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="inicio" class="page">
+        <h1>Bienvenido a [Nombre del Proyecto]</h1>
+        <p>Descripción breve del proyecto y su propósito.</p>
+        <div class="quick-links">
+            <a href="#registro" class="btn">Registrarse</a>
+            <a href="#login" class="btn">Iniciar Sesión</a>
+            <a href="#actividades" class="btn">Ver Actividades</a>
+        </div>
+    </section>
+
+    <!-- Ventana de Registro -->
+    <section id="registro" class="page">
+        <h2>Regístrate en [Nombre del Proyecto]</h2>
+        <form>
+            <input type="text" placeholder="Nombre completo" required>
+            <input type="email" placeholder="Correo electrónico" required>
+            <input type="password" placeholder="Contraseña" required>
+            <select>
+                <option value="estudiante">Estudiante</option>
+                <option value="docente">Docente</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <button type="submit">Registrarse</button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="#login">Inicia sesión aquí</a>.</p>
+    </section>
+
+    <!-- Ventana de Inicio de Sesión -->
+    <section id="login" class="page">
+        <h2>Inicia Sesión en [Nombre del Proyecto]</h2>
+        <form>
+            <input type="email" placeholder="Correo electrónico" required>
+            <input type="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <p>¿Olvidaste tu contraseña? <a href="#recuperar">Recupérala aquí</a>.</p>
+    </section>
+
+    <!-- Pie de Página -->
+    <footer>
+        <img src="logo.jpg" alt="Logo del Proyecto" class="logo-footer">
+        <p>Contacto: correo@ejemplo.com | Teléfono: 123-456-7890</p>
+        <div class="social-media">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+        </div>
+        <p><a href="#privacidad">Aviso de Privacidad</a> | <a href="#terminos">Términos de Uso</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
