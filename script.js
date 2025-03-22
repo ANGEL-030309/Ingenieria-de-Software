@@ -1,66 +1,70 @@
-// Importa los módulos de Firebase
-import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, addDoc } from './firebase.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { app } from "./firebase-config.js";
 
-// Selecciona los formularios
-const registroForm = document.querySelector('#registro form');
-const loginForm = document.querySelector('#login form');
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Maneja el registro de usuarios
-registroForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); // Evita que el formulario se envíe automáticamente
+// Registro de usuario
+document.querySelector("#registro form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nombre = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const rol = e.target[3].value;
 
-  // Obtiene los valores de los campos
-  const nombre = registroForm.querySelector('input[type="text"]').value;
-  const email = registroForm.querySelector('input[type="email"]').value;
-  const password = registroForm.querySelector('input[type="password"]').value;
-  const rol = registroForm.querySelector('select').value;
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-  // Registra al usuario
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("Usuario registrado:", userCredential.user);
+        await setDoc(doc(db, "usuarios", user.uid), {
+            nombre: nombre,
+            rol: rol,
+            fechaRegistro: new Date().toISOString()
+        });
 
-    // Guarda los datos adicionales en Firestore
-    await guardarUsuarioEnFirestore(userCredential.user.uid, nombre, rol);
-    alert("¡Registro exitoso!");
-    window.location.href = 'pagina-posterior.html'; // Redirige a otra página
-  } catch (error) {
-    console.error("Error al registrar:", error.message);
-    alert("Error al registrar: " + error.message);
-  }
+        window.location.href = "pagina-posterior.html";
+    } catch (error) {
+        console.error("Error en el registro:", error);
+        alert("Error en el registro: " + error.message);
+    }
 });
 
-// Maneja el inicio de sesión
-loginForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); // Evita que el formulario se envíe automáticamente
+// Inicio de sesión
+document.querySelector("#login form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = e.target[0].value;
+    const password = e.target[1].value;
 
-  // Obtiene los valores de los campos
-  const email = loginForm.querySelector('input[type="email"]').value;
-  const password = loginForm.querySelector('input[type="password"]').value;
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-  // Inicia sesión
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log("Usuario conectado:", userCredential.user);
-    alert("¡Inicio de sesión exitoso!");
-    window.location.href = 'pagina-posterior.html'; // Redirige a otra página
-  } catch (error) {
-    console.error("Error al iniciar sesión:", error.message);
-    alert("Error al iniciar sesión: " + error.message);
-  }
+        window.location.href = "pagina-posterior.html";
+    } catch (error) {
+        console.error("Error en el inicio de sesión:", error);
+        alert("Error en el inicio de sesión: " + error.message);
+    }
 });
 
-// Guarda los datos del usuario en Firestore
-const guardarUsuarioEnFirestore = async (userId, nombre, rol) => {
-  try {
-    await addDoc(collection(db, "usuarios"), {
-      userId: userId,
-      nombre: nombre,
-      rol: rol,
-      fechaRegistro: new Date()
+// Cerrar sesión
+document.querySelector(".logout-btn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+        window.location.href = "index.html";
+    }).catch((error) => {
+        console.error("Error al cerrar sesión:", error);
     });
-    console.log("Usuario guardado en Firestore");
-  } catch (error) {
-    console.error("Error al guardar en Firestore:", error);
-  }
-};
+});
+
+// Verificación del estado de autenticación
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+        if (userDoc.exists()) {
+            document.getElementById("nombreUsuario").textContent = userDoc.data().nombre;
+            document.getElementById("rolUsuario").textContent = userDoc.data().rol;
+        }
+    } else {
+        window.location.href = "index.html";
+    }
+});
